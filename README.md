@@ -1,4 +1,3 @@
-
 # Model Fit in Linear Regression - Lab
 
 ## Introduction
@@ -74,7 +73,7 @@ def stepwise_selection(X, y,
         changed=False
         # forward step
         excluded = list(set(X.columns)-set(included))
-        new_pval = pd.Series(index=excluded)
+        new_pval = pd.Series(index=excluded, dtype='float64')
         for new_column in excluded:
             model = sm.OLS(y, sm.add_constant(pd.DataFrame(X[included+[new_column]]))).fit()
             new_pval[new_column] = model.pvalues[new_column]
@@ -93,7 +92,7 @@ def stepwise_selection(X, y,
         worst_pval = pvalues.max() # null if pvalues is empty
         if worst_pval > threshold_out:
             changed=True
-            worst_feature = pvalues.argmax()
+            worst_feature = pvalues.idxmax()
             included.remove(worst_feature)
             if verbose:
                 print('Drop {:30} with p-value {:.6}'.format(worst_feature, worst_pval))
